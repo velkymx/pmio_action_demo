@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>PMIO Action Demo</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
+  </head>
+  <body>
+      <div class="container" id="app">
+        <h1>Expense Request</h1>
+        <div class="alert alert-success" v-if="message == true">
+          <strong>Sent!</strong> Your message was sent to the manager for approval!
+        </div>
+        <div class="alert alert-danger" v-if="error == true">
+          <strong>Woops!</strong> Your message was not sent to the manager for approval. Please double check your Environmnet Key.
+        </div>
+        <form id="sendRequest" @submit="doSubmit" v-on:submit.prevent>
+          <div class="form-group">
+            <label for="amount_data">Expense Amount</label>
+            <input type="text" class="form-control required" v-model="amount_data" id="amount_data" name="amount_data" placeholder="$56.00">
+          </div>
+          <div class="form-group">
+            <label for="amount_description">Expense Information</label>
+            <input type="text" class="form-control required" id="amount_description" v-model="amount_description" name="amount_description" placeholder="Back waxing">
+          </div>
+          <div class="form-group">
+            <label for="email_to">Manager Email</label>
+            <input type="email" class="form-control required" id="email_to" v-model="email_to" name="email_to" placeholder="example@url.com">
+          </div>
+          <div class="form-group">
+            <label for="env">Environment Key</label>
+            <input type="text" class="form-control" name="env" placeholder="" value="" v-model="env">
+          </div>
+          <button type="submit" class="btn btn-primary">Send Authorization Request</button>
+        </form>
+      </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/js/bootstrap.min.js" integrity="sha384-vZ2WRJMwsjRMW/8U7i6PWi6AlO1L79snBrmgiDpgIWJ82z8eA5lenwvxbMV1PAh7" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script type="text/javascript">
+
+      var app = new Vue({
+        el: '#app',
+        data : {
+          amount_data: '',
+          amount_description: '',
+          email_to: '',
+          env: '',
+          url: '.api.processmaker.io/api/v1/processes/gmail_approval/events/Start/webhook/',
+          error: false,
+          message: false
+        },
+        methods: {
+          doSubmit() {
+
+            axios.get('https://' + this.env + this.url + '?email_to=' + this.email_to + '&amount_data=' + this.amount_data + '&amount_description=' + this.amount_description)
+              .then(function (response) {
+                  app.message = true;
+                  app.amount_data = '';
+                  app.amount_description = '';
+                  app.email_to = '';
+              })
+              .catch(function (error) {
+                console.log(error);
+                  app.error = true;
+              });
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
