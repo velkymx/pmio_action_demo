@@ -15,7 +15,7 @@
           <strong>Sent!</strong> Your message was sent to the manager for approval!
         </div>
         <div class="alert alert-danger" v-if="error == true">
-          <strong>Woops!</strong> Your message was not sent to the manager for approval. Please double check your Environmnet Key.
+          <strong>Woops!</strong> Your message was not sent to the manager for approval. Please double check your Environment Key.
         </div>
         <form id="sendRequest" @submit="doSubmit" v-on:submit.prevent>
           <div class="form-group">
@@ -60,6 +60,7 @@
             axios.get('https://' + this.env + this.url + '?email_to=' + this.email_to + '&amount_data=' + this.amount_data + '&amount_description=' + this.amount_description)
               .then(function (response) {
                   app.message = true;
+                  app.error = false;
                   app.amount_data = '';
                   app.amount_description = '';
                   app.email_to = '';
@@ -67,6 +68,7 @@
               .catch(function (error) {
                 console.log(error);
                   app.error = true;
+                  app.message = false;
               });
           }
         }
