@@ -10,7 +10,7 @@
   </head>
   <body>
       <div class="container" id="app">
-        <h1>Vacation Request</h1>
+        <h1>Time-Off Request</h1>
         <div class="alert alert-success" v-if="message == true">
           <strong>Sent!</strong> Your message was sent to the manager for approval!
         </div>
@@ -21,6 +21,10 @@
           <div class="form-group">
             <label for="full_name"></label>
             <input type="text" class="form-control" v-model="full_name" id="full_name" name="full_name" placeholder="John Doe">
+          </div>
+          <div class="form-group">
+            <label for="reason"></label>
+            <input type="text" class="form-control" v-model="reason" id="reason" name="reason" placeholder="Vacation, Sick Time, Etc">
           </div>
           <div class="form-group">
             <label for="amount_data">From</label>
@@ -57,6 +61,7 @@
           date_start: '',
           full_name: '',
           email_to: '',
+          reason: '',
           env: '',
           url: '.api.processmaker.io/api/v1/processes/gmail_approval/events/Start/webhook/',
           error: false,
@@ -71,6 +76,7 @@
             '?email_to=' + this.email_to +
             '&date_end=' + this.date_end +
             '&date_start=' + this.date_start +
+            '&reason=' + this.reason +
             '&full_name=' + this.full_name
           )
               .then(function (response) {
@@ -79,6 +85,7 @@
                   app.date_end = '';
                   app.date_start = '';
                   app.full_name = '';
+                  app.reason = '';
                   app.email_to = '';
               })
               .catch(function (error) {
@@ -90,26 +97,26 @@
         }
       });
 
-      $( function() {
-      $( "#date_start" ).datepicker({
-        defaultDate: "+1w",
-        changeMonth: true,
-        numberOfMonths: 1,
-        onClose: function( selectedDate ) {
-          $( "#date_end" ).datepicker( "option", "minDate", selectedDate );
-        }
-      });
-
-      $( "#date_end" ).datepicker({
-        defaultDate: "+1w",
-        changeMonth: true,
-        numberOfMonths: 1,
-        onClose: function( selectedDate ) {
-          $( "#date_start" ).datepicker( "option", "maxDate", selectedDate );
-        }
-      });
-
-      });
+      // $( function() {
+      // $( "#date_start" ).datepicker({
+      //   defaultDate: "+1w",
+      //   changeMonth: true,
+      //   numberOfMonths: 1,
+      //   onClose: function( selectedDate ) {
+      //     $( "#date_end" ).datepicker( "option", "minDate", selectedDate );
+      //   }
+      // });
+      //
+      // $( "#date_end" ).datepicker({
+      //   defaultDate: "+1w",
+      //   changeMonth: true,
+      //   numberOfMonths: 1,
+      //   onClose: function( selectedDate ) {
+      //     $( "#date_start" ).datepicker( "option", "maxDate", selectedDate );
+      //   }
+      // });
+      //
+      // });
     </script>
   </body>
 </html>
